@@ -5,7 +5,8 @@ use std::str::FromStr;
 use std::process;
 use std::sync::mpsc::{Sender,channel};
 use std::thread;
-#[allow(dead_code)]
+
+
 const MAX: u16 = 65535;
 struct Arguments {
     flag:String,
@@ -24,7 +25,7 @@ impl Arguments {
 
      let f = args[1].clone();
      if let Ok(ip) = IpAddr::from_str(&f){
-        return Ok(Arguments{flag:String::from(""),ip,threads:4})
+        return Ok(Arguments{flag:String::from(""),ip,threads:4,});
      } 
      else{
         let flag = args[1].clone();
@@ -46,7 +47,7 @@ impl Arguments {
                 Err(_)=> return Err("failed to parse thread number")
             };
 
-            return  Ok(Arguments{threads,flag,ip});
+            return  Ok(Arguments{threads,flag,ip,});
         } 
         else {
             return  Err("invalid syntax");
@@ -61,7 +62,7 @@ fn scan(tx:Sender<u16>,start_port:u16,addr:IpAddr,num_threads:u16){
     loop {
           match TcpStream ::connect((addr,port)) {
               Ok(_) => {
-                print!(".");
+                println!(".");
                 io::stdout().flush().unwrap();
                 tx.send(port).unwrap();
               }
